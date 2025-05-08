@@ -1,14 +1,17 @@
 #include <iostream>
 #include <cstring>
 using namespace std;
-//koj i da ja spushtil samo zadacata vo grupata od 5 vo cetvrtok vo 322A nemoj taka smeni bar ime na file
-//ne bidete glupi ako mi go najdat githubot mozhe da blokiraat github
-//samo ovoj komentar e vo ovie da ne barate drugi :)
+
 class recenica{
     private:
     char *rec=nullptr;
     int brNaEl;
     public:
+    recenica(){setRec("Zdravo!");}
+    recenica(recenica &r1){
+        strcpy(r1.rec,rec);
+        brNaEl=r1.brNaEl;
+    }
     recenica(const char *recc=nullptr){
         if(recc!=nullptr){
             brNaEl=strlen(recc);
@@ -25,43 +28,34 @@ class recenica{
             strcpy(rec,recc);
         }
     }
-    int getBrNaEl(){return brNaEl;}
-    ~recenica(){delete[] rec;}
-};
-
-class korisnik{
-    private:
-    recenica r;
-    public:
-    korisnik(){r.setRec("Zdravo!");}
-    korisnik(const char *rec=nullptr){r.setRec(rec);}
-    korisnik(korisnik &r1){r.setRec(r1.r.getRec());}
     void dodadi(const char *bukv,bool lok){
-        char *novRec=new char[strlen(bukv)+strlen(r.getRec())+1];
+        char *novRec=new char[strlen(bukv)+strlen(rec)+1];
         if(lok==0){
             strcpy(novRec,bukv);
-            strcat(novRec,r.getRec());
+            strcat(novRec,rec);
         }else if(lok==1){
-            strcpy(novRec,r.getRec());
+            strcpy(novRec,rec);
             strcat(novRec,bukv);
         }
-        r.setRec(novRec);
+        setRec(novRec);
     }
     void brishiZnak(int n){
         char *pom;
-        strcpy(pom,r.getRec());
-        for(int i=n;i<r.getBrNaEl();i++)pom[i]=pom[i+1];
-        r.setRec(pom);
+        strcpy(pom,rec);
+        for(int i=n;i<brNaEl;i++)pom[i]=pom[i+1];
+        setRec(pom);
     }
-    void pechati(){cout<<r.getRec()<<endl;}
-    ~korisnik(){}
+    int getBrNaEl(){return brNaEl;}
+    void pechati(){cout<<rec<<endl;}
+    ~recenica(){delete[] rec;}
 };
 
 int main(){
     char c[]="Mnogu sakam da ucham PSP!";
-    korisnik k(c);
+    recenica k(c);
     k.pechati();
     k.dodadi(" za copy konstruktor.",1);
     k.brishiZnak(24);
     k.pechati();
+
 }
